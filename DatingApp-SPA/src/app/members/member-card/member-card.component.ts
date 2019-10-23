@@ -7,12 +7,9 @@ import { User } from 'src/app/_models/user';
   styleUrls: ['./member-card.component.css']
 })
 export class MemberCardComponent implements OnInit {
-
   @Input() user: User;
-  
-  constructor() { }
 
-  ngOnInit() {
-  }
+  constructor() {}
 
+  ngOnInit() {}
 }

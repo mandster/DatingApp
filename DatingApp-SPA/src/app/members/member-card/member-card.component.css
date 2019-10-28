@@ -14,6 +14,7 @@
     position: relative;
 }
 .member-icons {
+    font-size:  9px;
     position: absolute;
     bottom: -30%;
     left:0;
@@ -21,6 +22,11 @@
     margin-left: auto;
     margin-right: auto;
     opacity: 0;
+}
+
+.fa-small
+{
+    font-size: 9px;
 }
 .card-img-wrapper:hover .member-icons{
 bottom: 0;

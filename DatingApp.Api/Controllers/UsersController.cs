@@ -6,6 +6,7 @@ using AutoMapper;
 using DatingApp.Api.Data;
 using DatingApp.Api.Dtos;
 using DatingApp.Api.Helpers;
+using DatingApp.Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,7 +41,6 @@ namespace DatingApp.Api.Controllers
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users);
             Response.AddPagination(users.CurrentPage,
             users.PageSize, users.TotalCount, users.TotalPages);
-
             return Ok(usersToReturn);
         }
 
@@ -67,6 +67,63 @@ namespace DatingApp.Api.Controllers
                 return NoContent();
 
             throw new Exception($"Updating user (id) failed on save");
+        }
+
+
+        [HttpPost("{id}/Like/{recepientId}")]
+        public async Task<IActionResult> LikeUser(int id, int recepientId)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            var like = await _repo.GetLike(id, recepientId);
+            if (like != null)
+
+                return BadRequest("You already like this user");
+            if (await _repo.GetUser(recepientId) == null)
+                return NotFound();
+
+            like = new Models.Like
+            {
+                LikerId = id,
+                LikeeId = recepientId
+            };
+            _repo.Add<Like>(like);
+            if (await _repo.SaveAll())
+            {
+                return Ok();
+            }
+            return BadRequest("Failed to like user");
+        }
+
+        [HttpPost("{id}/UnLike/{likeeId}")]
+        public async Task<IActionResult> UnLikeUser(int id, int likeeId)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            var like = await _repo.GetLiked(id, likeeId);
+            if (like != null)
+            {
+                _repo.Delete(like);
+                return Ok();
+            }
+            return BadRequest("Failed to unlike user");
+        }
+
+
+        [HttpGet("{id}/IsLiked/{likeeId}")]
+        public async Task<IActionResult> isUserLiked(int id, int likeeId)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            var like = await _repo.GetLiked(id, likeeId);
+            if (like != null)
+            {
+                return Ok();
+            }
+            return BadRequest("Some problem");
         }
     }
 }

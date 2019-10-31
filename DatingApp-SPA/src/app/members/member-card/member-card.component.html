@@ -13,13 +13,17 @@
         <i class="fa fa-user  fa-small"></i></button>
       </li>
       <li class="list-inline-item" >
-        <button class="btn btn-primary fa-small"   (click)="sendLike(user.id)"><i class="fa fa-heart fa-small" ></i></button>
+        <button class="btn btn-primary fa-small" (click)="sendLike(user.id)"
+        ><i class="fa fa-heart fa-small" ></i></button>
       </li>
-      <li class="list-inline-item"  >
-        <button class="btn btn-secondary fa-small" (click)="unLike(user.id)"><i class="fa fa-heart fa-small"></i></button>
+      <li class="list-inline-item" >
+        <button class="btn btn-secondary fa-small" (click)="unLike(user.id)">
+          <i class="fa fa-heart fa-small"></i></button>
       </li>
       <li class="list-inline-item">
-        <button class="btn btn-primary fa-small"><i class="fa fa-envelope  fa-small"></i></button>
+        <button class="btn btn-primary fa-small" [routerLink]="['/members/', 
+        user.id]" [queryParams]="{tab:3}"><i class="fa fa-envelope  fa-small">
+        </i></button>
       </li>
     </ul>
   </div>

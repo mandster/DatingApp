@@ -18,7 +18,9 @@ export class MemberCardComponent implements OnInit {
     private alertify: AlertifyService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    
+  }
 
   sendLike(id: number) {
     this.userService
@@ -32,6 +34,7 @@ export class MemberCardComponent implements OnInit {
         }
       );
   }
+
   unLike(id: number) {
     this.userService.unLike(this.authService.decodedToken.nameid, id).subscribe(
       data => {

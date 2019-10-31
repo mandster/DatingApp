@@ -17,6 +17,14 @@ namespace DatingApp.Api.Data
         Task<Like> GetLike(int userId, int recepientId);
         Task<Like> GetLiked(int userId, int likeeId);
 
+        Task<Message> GetMessage(int id);
+
+        Task<PageList<Message>> GetMessagesForUser(MessageParams messageParams);
+
+        Task<IEnumerable<Message>> GetMessageThread(int userId, int recepientId);
+
+
+
 
       //  Task<IEnumerable<Like>> UnLikeUser(int userId, int likeeId);
 

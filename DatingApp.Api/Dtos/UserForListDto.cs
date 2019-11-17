@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using DatingApp.Api.Models;
 
 namespace DatingApp.Api.Dtos
 {
@@ -14,6 +16,7 @@ namespace DatingApp.Api.Dtos
         public string City { get; set; }
         public string Country { get; set; }
         public string PhotoUrl { get; set; }
+        public ICollection<LikeesForReturnDto> Likees { get; set; }
 
     }
 }

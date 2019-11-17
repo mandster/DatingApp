@@ -13,11 +13,20 @@ namespace DatingApp.Api.Helpers
             .ForMember(d => d.PhotoUrl, o => o.MapFrom(src =>
             src.Photos.FirstOrDefault(p => p.IsMain).Url))
             .ForMember(d => d.Age, opt =>
-            opt.MapFrom(src => src.DateofBirth.CalculateAge()));
-            CreateMap<User, UserForDetailedDto>().ForMember(d => d.PhotoUrl, o => o.MapFrom(src =>
-            src.Photos.FirstOrDefault(p => p.IsMain).Url))
+            opt.MapFrom(src => src.DateofBirth.CalculateAge()))
+             .ForMember(d => d.Likees, o => o.MapFrom(src =>
+            src.Likees.Where(p => p.LikerId == src.Id)));
+            
+            CreateMap<User, UserForDetailedDto>()
+            .ForMember(d => d.PhotoUrl, 
+            o => o.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url))
             .ForMember(d => d.Age, opt =>
-            opt.MapFrom(src => src.DateofBirth.CalculateAge()));
+            opt.MapFrom(src => src.DateofBirth.CalculateAge()))
+             .ForMember(d => d.Likees, o => o.MapFrom(src =>
+            src.Likees.Where(p => p.LikerId == src.Id)));
+
+            CreateMap<Like, LikeesForReturnDto>();
+
             CreateMap<Photo, PhotosForDetailedDto>();
             CreateMap<UserForUpdateDto, User>();
             CreateMap<PhotoForCreationDto, Photo>();
@@ -28,9 +37,7 @@ namespace DatingApp.Api.Helpers
             .ForMember(m => m.SenderPhotoUrl, opt => opt
             .MapFrom(u => u.Sender.Photos.FirstOrDefault(p => p.IsMain).Url))
             .ForMember(m => m.RecipientPhotoUrl, opt => opt
-            .MapFrom(u => u.Recipient.Photos.FirstOrDefault(p => p.IsMain).Url))
-
-            ;
+            .MapFrom(u => u.Recipient.Photos.FirstOrDefault(p => p.IsMain).Url));
 
 
         }

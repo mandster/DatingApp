@@ -39,6 +39,7 @@ namespace DatingApp.Api.Controllers
             var users = await _repo.GetUsers(userParams);
 
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDto>>(users);
+        
             Response.AddPagination(users.CurrentPage,
             users.PageSize, users.TotalCount, users.TotalPages);
             return Ok(usersToReturn);
@@ -110,20 +111,7 @@ namespace DatingApp.Api.Controllers
             }
             return BadRequest("Failed to unlike user");
         }
-
-
-        [HttpGet("{id}/IsLiked/{likeeId}")]
-        public async Task<IActionResult> isUserLiked(int id, int likeeId)
-        {
-            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-                return Unauthorized();
-
-            var like = await _repo.GetLiked(id, likeeId);
-            if (like != null)
-            {
-                return Ok();
-            }
-            return BadRequest("Some problem");
-        }
     }
+
+
 }

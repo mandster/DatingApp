@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User } from '../_models/user';
+import { User, UserResult } from '../_models/user';
 import { Pagination, PaginatedResult } from '../_models/pagination';
 import { map } from 'rxjs/operators';
 import { Message } from '../_models/message';
@@ -42,10 +42,13 @@ export class UserService {
       params = params.append('likers', 'true');
     }
 
+    if (likesParams === 'UserLikers') {
+      params = params.append('userlikers', 'true');
+    }
+
     if (likesParams === 'Likees') {
       params = params.append('likees', 'true');
     }
-
     return this.http
       .get<User[]>(this.baseUrl + 'users', { observe: 'response', params })
       .pipe(
@@ -60,35 +63,54 @@ export class UserService {
         })
       );
   }
+
+  getUserWithLikees(id): Observable<UserResult<User>> {
+    const userResult: UserResult<User> = new UserResult() ;
+    return this.http
+      .get<User>(this.baseUrl + 'users/' + id, { observe: 'response' })
+      .pipe(
+        map(response => {
+          userResult.result = response.body;
+          return userResult;
+        })
+      );
+  }
+
   getUser(id): Observable<User> {
     return this.http.get<User>(this.baseUrl + 'users/' + id);
   }
+
   updateUser(id: number, user: User) {
     return this.http.put(this.baseUrl + 'users/' + id, user);
   }
+
   setMainPhoto(userId: number, id: number) {
     return this.http.post(
       this.baseUrl + 'users/' + userId + '/photos/' + id + '/setMain',
       {}
     );
   }
+
   deletePhoto(userId: number, id: number) {
     return this.http.delete(this.baseUrl + 'users/' + userId + '/photos/' + id);
   }
+
   sendLike(id: number, recipientId: number) {
     return this.http.post(
       this.baseUrl + 'users/' + id + '/Like/' + recipientId,
       {}
     );
   }
+
   unLike(id: number, likeeId: number) {
     return this.http.post(
       this.baseUrl + 'users/' + id + '/UnLike/' + likeeId,
       {}
     );
   }
+
   isLiked(id: number, likeeId: number) {
-    return this.http.post(
+    return this.http.get(
       this.baseUrl + 'users/' + id + '/IsLiked/' + likeeId,
       {}
     );
@@ -141,7 +163,8 @@ export class UserService {
     );
   }
   markAsRead(userId: number, messageId: number) {
-    return this.http.post(
+    return this.http
+      .post(
         this.baseUrl + 'users/' + userId + '/messages/' + messageId + '/read',
         ''
       )

@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
-  user: User = {};
+  user: User ;
   registerForm: FormGroup;
   bsConfig: Partial<BsDatepickerConfig>;
 
@@ -76,8 +76,8 @@ export class RegisterComponent implements OnInit {
           this.alertify.error(error);
         },
         () => {
-          this.authService.login(this.user).subscribe(()=> {
-this.router.navigate(['/members']);
+          this.authService.login(this.user).subscribe(() => {
+            this.router.navigate(['/members']);
           });
         }
       );

@@ -10,25 +10,21 @@ import { UserService } from '../_services/user.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AuthService } from '../_services/auth.service';
 
 @Injectable()
-export class MemberListResolver implements Resolve<User[]> {
-pageNumber = 1;
-pageSize = 5;
-likesParam = 'UserLikers';
-
+export class MemberCardResolver implements Resolve<User> {
   constructor(
     private userService: UserService,
     private router: Router,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
+    private authService: AuthService
   ) {}
-
-  resolve(route: ActivatedRouteSnapshot): Observable<User[]> {
-    return this.userService.getUsers(this.pageNumber, this.pageSize, null, this.likesParam).
-    pipe(
+  resolve(route: ActivatedRouteSnapshot): Observable<User> {
+    return this.userService.getUserWithLikees(this.authService.decodedToken.nameid).pipe(
       catchError(error => {
         this.alertify.error('Problem retreiving data');
-        this.router.navigate(['/home']);
+        this.router.navigate(['/members']);
         return of(null);
       })
     );

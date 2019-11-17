@@ -15,4 +15,9 @@ export interface User {
   introduction?: string;
   lookingFor?: string;
   photos?: Photo[];
+  likees?: [];
+}
+
+export class UserResult<T> {
+  result: T;
 }

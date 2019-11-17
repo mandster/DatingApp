@@ -22,11 +22,7 @@ namespace DatingApp.Api.Data
         Task<PageList<Message>> GetMessagesForUser(MessageParams messageParams);
 
         Task<IEnumerable<Message>> GetMessageThread(int userId, int recepientId);
-
-
-
-
-      //  Task<IEnumerable<Like>> UnLikeUser(int userId, int likeeId);
+        //  Task<IEnumerable<Like>> UnLikeUser(int userId, int likeeId);
 
     }
 }
